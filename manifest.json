@@ -2,7 +2,7 @@
     "name": "Ma première PWA",
     "short_name": "First PWA",
     "start_url": "index.html",
-    "display": "minimal-ui",
+    "display": "standalone",
     "theme_color": "#FF0000",
     "background_color": "#FF0000",
      "prefer_related_applications": false,
