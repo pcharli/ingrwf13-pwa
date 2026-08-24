@@ -1,4 +1,4 @@
-const version = 2.4
+const version = 2.5
 const CACHE_NAME = `demo-${version}`
 
 const files = [
