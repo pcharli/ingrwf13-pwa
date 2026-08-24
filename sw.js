@@ -14,8 +14,9 @@ const files = [
     "./manifest.json",
     "./icons/favicon-32x32.png",
     "./icons/favicon-96x96.png",
-    "./screenshots/desktop.png",
-    "./screenshots/mobile.png"
+    //"./screenshots/desktop.png",
+    "./screenshots/mobile.png",
+    "https://ingrwf13-default-rtdb.europe-west1.firebasedatabase.app/todos.json"
 ]
 
 self.addEventListener('install', e => {
@@ -24,7 +25,7 @@ self.addEventListener('install', e => {
         caches.open(CACHE_NAME)
             .then(cache => cache.addAll(files))
     )
-     self.skipWaiting();
+    self.skipWaiting();
 })
 
 self.addEventListener('activate', e => {
@@ -44,9 +45,60 @@ self.addEventListener('activate', e => {
     self.clients.claim()
 })
 
-self.addEventListener('fetch', e => {
-    e.respondWith(
-        caches.match(e.request)
-            .then(response => response || fetch(e.request))
-    )
-})
+const update = async (request) => {
+    const response = await fetch(request)
+
+    const cache = await caches.open(CACHE_NAME)
+    await cache.put(request, response.clone())
+
+    return response
+}
+
+const cacheFirst = async (request) => {
+
+    const responseFromCache = await caches.match(request);
+
+    if (responseFromCache) {
+        return responseFromCache;
+    }
+
+    const responseFromNetwork = await fetch(request);
+
+    const cache = await caches.open(CACHE_NAME);
+
+    await cache.put(
+        request,
+        responseFromNetwork.clone()
+    );
+
+    return responseFromNetwork;
+};
+
+const networkFirst = async (request) => {
+    try {
+        return await update(request)
+    }
+    catch {
+        return caches.match(request)
+    }
+}
+
+self.addEventListener("fetch", (e) => {
+    //récup de l'url
+    const url = new URL(e.request.url);
+
+    // On ignore ce qui n'est pas HTTP/HTTPS
+    if (url.protocol !== "http:" && url.protocol !== "https:") {
+        return;
+    }
+
+    if (!e.request.url.includes("firebase")) {
+        e.respondWith(
+            cacheFirst(e.request)
+        );
+    } else {
+        e.respondWith(
+            networkFirst(e.request)
+        );
+    }
+});
