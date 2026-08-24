@@ -1,3 +1,12 @@
+//mode actuel ?
+const isPWA =
+  window.matchMedia("(display-mode: standalone)").matches ||
+  window.matchMedia("(display-mode: minimal-ui)").matches;
+
+  if (isPWA) {
+    alert('pwa')
+  }
+
 // Install
 const installBtn = document.querySelector('#install')
 let defferedPrompt = null
