@@ -1,4 +1,4 @@
-const version = 2.2
+const version = 2.3
 const CACHE_NAME = `demo-${version}`
 
 const files = [
@@ -10,8 +10,12 @@ const files = [
     "./js/register-sw.js",
     "./icons/favicon-16x16.png",
     "./icons/favicon-256x256.png",
-    "./favicon.ico"
-
+    "./favicon.ico",
+    "./manifest.json",
+    "./icons/favicon-32x32.png",
+    "./icons/favicon-96x96.png",
+    "./screenshots/desktop.png",
+    "./screenshots/mobile.png"
 ]
 
 self.addEventListener('install', e => {
