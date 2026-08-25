@@ -1,9 +1,15 @@
 import { installApp } from './js/install.js'
 import { Register } from './js/register-sw.js'
-
+import { notifyMe, notifRequest } from './js/notifications.js'
 installApp()
 
-Register()
+//Register()
+
+notifRequest()
+
+setTimeout(()=> {
+    notifyMe()
+}, 10000)
 //mode actuel ?
 const isPWA =
     window.matchMedia("(display-mode: standalone)").matches ||
